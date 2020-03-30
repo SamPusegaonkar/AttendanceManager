@@ -1,70 +1,163 @@
-<template>   
-    <div>
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-        <div class="container h-100">
-        <div class="d-flex justify-content-center h-100">
-            <div class="user_card">
-                <div class="d-flex justify-content-center">
-                    <div class="brand_logo_container">
-                        <img src="https://cdn.freebiesupply.com/logos/large/2x/pinterest-circle-logo-png-transparent.png" class="brand_logo" alt="Logo">
-                    </div>
-                </div>
-                <div class="d-flex justify-content-center form_container">
-                    <form>
-                        <div class="form-group">
-                            <!-- <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="customControlInline">
-                                <label class="custom-control-label" for="customControlInline">Remember me</label>
-                            </div> -->
-                            <div class="form-check form-check-inline custom-control custom-checkbox">
-                                <input class="custom-control-input" type="radio" name="inlineRadioOptions" id="customControlInline1" value="option1" checked>
-                                <label class="custom-control-label" for="customControlInline1">Admin</label>
-                            </div>
-                            <div class="form-check form-check-inline custom-control custom-checkbox">
-                                <input class="custom-control-input" type="radio" name="inlineRadioOptions" id="customControlInline2" value="option2" checked>
-                                <label class="custom-control-label" for="customControlInline2">Professor</label>
-                            </div>
 
+  <!-- <v-app id="inspire">
+    <v-content>
+      <v-container
+        fluid
+        fill-height
+      >
+        <v-layout
+          align-center
+          justify-center
+        >
+          <v-flex
+            xs12
+            sm8
+            md4
+          >
+            <v-card class="elevation-12">
+              <v-toolbar
+                color="primary"
+                dark
+                flat
+              >
+                <v-toolbar-title>Login form</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-tooltip bottom>
+                  
+                  <span>Source</span>
+                </v-tooltip>
 
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            </div>
-                            <input type="text" name="" class="form-control input_user" value="" placeholder="username">
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
-                            </div>
-                            <input type="password" name="" class="form-control input_pass" value="" placeholder="password">
-                        </div>
-                        
-                        <div class="d-flex justify-content-center mt-3 login_container">
-                        
-                        <router-link to="/professorportal" @click="$router.push('/professorportal')">
-                            <button type="button" name="button" class="btn login_btn">    
-                                Login                 
-                            </button>
-                        </router-link>
-                         
-                        
-                   </div>
-                    </form>
-                </div>
-        
+              </v-toolbar>
+
+              <v-card-text>
                 
-            </div>
-        </div>
-    </div>
-    </div>
+                <v-form>
+                  <v-radio-group v-model="row" row>
+                  <v-radio label="Admin" value="Admin"></v-radio>
+                  <v-radio label="Professor" value="Professor"></v-radio>
+                </v-radio-group>
+                  
+                  <v-text-field
+                    label="Login"
+                    name="login"
+                    prepend-icon="person"
+                    type="text"
+                    ref="address"
+                   
+                    placeholder="abc@mctrgit.ac.in"
+                    required
+                  ></v-text-field>
+
+                  <v-text-field
+                    id="password"
+                    label="Password"
+                    name="password"
+                    prepend-icon="lock"
+                    type="password"
+                    
+                    required
+                  ></v-text-field>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" >Login</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+  </v-app> -->
+  <template>
+  <v-app>
+    <v-card width="400" class="mx-auto mt-5">
+      <v-card-title class="pb-0">
+        <h1>Login</h1>
+      </v-card-title>
+      <v-card-text>
+        <v-form>
+          <v-text-field 
+            label="Username" 
+            prepend-icon="mdi-account-circle"
+          />
+          <v-text-field 
+            :type="showPassword ? 'text' : 'password'" 
+            label="Password"
+            prepend-icon="mdi-lock"
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="showPassword = !showPassword"
+          />
+        </v-form>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-btn color="success">Register</v-btn>
+        <v-btn color="info">Login</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-app>
 </template>
 
+
 <script>
-    
+
     export default {
-        name:'Mainpage',
-    }
+      name:'Mainpage',
+      data () {
+        return {
+          radioGroup: 1,
+          showPassword: false,
+
+          methods:{
+            checkCredentials:function(){
+              console.log("fdsfdsfdsfdsfsdf");
+              // this.$router.push('/professorportal');
+
+              // var excel = require('excel4node');
+
+              // var workbook = new excel.Workbook();
+
+              // // Add Worksheets to the workbook
+              // var worksheet = workbook.addWorksheet('Sheet 1');
+
+              // // Create a reusable style
+              // var style = workbook.createStyle({
+              //   font: {
+              //     color: '#FF0800',
+              //     size: 12
+              //   },
+              //   numberFormat: '$#,##0.00; ($#,##0.00); -'
+              // });
+
+              // // Set value of cell A1 to 100 as a number type styled with paramaters of style
+              // worksheet.cell(1,1).number(100).style(style);
+
+              // // Set value of cell B1 to 300 as a number type styled with paramaters of style
+              // worksheet.cell(1,2).number(200).style(style);
+
+              // // Set value of cell C1 to a formula styled with paramaters of style
+              // worksheet.cell(1,3).formula('A1 + B1').style(style);
+
+              // // Set value of cell A2 to 'string' styled with paramaters of style
+              // worksheet.cell(2,1).string('string').style(style);
+
+              // // Set value of cell A3 to true as a boolean type styled with paramaters of style but with an adjustment to the font size.
+              // worksheet.cell(3,1).bool(true).style(style).style({font: {size: 14}});
+
+              // workbook.write('Excel.xlsx');
+              // var xlsx = require('node-xlsx');
+
+              // var obj = xlsx.parse(__dirname + 'src\\data\\Excel\\Professor.xlsx'); // parses a file
+              // console.log(obj);
+            }
+          }
+        }
+        
+        }
+      }
+    
+
 </script>
 
 <style lang="scss" scoped>
