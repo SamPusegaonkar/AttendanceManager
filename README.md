@@ -1,2 +1,3 @@
-# sameerpusegaonkar-gmail.com
-AttendanceManager
+# AttendanceManager
+
+**Repo still under construction**
