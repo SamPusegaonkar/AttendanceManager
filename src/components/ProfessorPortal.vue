@@ -1,164 +1,169 @@
 <template>
-<div >
-  <v-app light>       
-    <v-navigation-drawer height="100%" absolute   permanent  :clipped="clipped" v-model="drawer" enable-resize-watcher app dark class="primary">
-       <v-container fluid>
-        <v-layout column>
-            <v-card>
-                <v-card-text>
-                    <v-flex class="mb-4">
-                        <v-avatar size="96" class="mr-4">
-                            <img :src="'/avatars/avatar_' + (form.avatar.toLowerCase()) + '.png'" alt="Avatar">
-                        </v-avatar>
-                        <v-btn @click="openAvatarPicker">Change Avatar</v-btn>
-                    </v-flex>
-                    <v-text-field
-                        v-model="form.firstName"
-                        label="FirstName"></v-text-field>
-                    <v-text-field
-                        v-model="form.lastName"
-                        label="Last Name"></v-text-field>
-                    <v-text-field
-                        v-model="form.contactEmail"
-                        label="Email Address"></v-text-field>
-                    <v-text-field
-                        v-model="form.contactDepartment"
-                        label="Department"></v-text-field>
-                </v-card-text>
-                
-            </v-card>
-        </v-layout>
-        <avatar-picker
-            v-model="showAvatarPicker"
-            :current-avatar="form.avatar"
-            @selected="selectAvatar"></avatar-picker>
-    </v-container>
-    </v-navigation-drawer>    
-
-    <v-content>
-      <v-toolbar fixed app :clipped-right="clipped"   >
-          Your Portal
-    </v-toolbar>  
-                <v-container class="pa-4 text-center">
-                <v-row class="fill-height" align="center" justify="center">
-                <template v-for="(item, i) in items">
-                    <v-col
-                    :key="i"
-                    cols="12"
-                    md="4"
-                    >
-                    <v-hover v-slot:default="{ hover }">
-                        <v-card
-                        :elevation="hover ? 12 : 2"
-                        :class="{ 'on-hover': hover }"
-                        >
-                        <v-img
-                            :src="item.img"
-                            height="225px"
-                        >
-                            <v-card-title class="title white--text">
-                            <v-row
-                                class="fill-height flex-column"
-                                justify="space-between"
-                            >
-                                <p class="mt-4 subheading text-left">{{ item.title }}</p>
-
-                                <div>
-                                <p class="ma-0 body-1 font-weight-bold font-italic text-left">
-                                    {{ item.text }}
-                                </p>
-                                <p class="caption font-weight-medium font-italic text-left">
-                                    {{ item.subtext }}
-                                </p>
-                                </div>
-
-                                <div class="align-self-center">
-                                <v-btn
-                                    v-for="(icon, index) in icons"
-                                    :key="index"
-                                    :class="{ 'show-btns': hover }"
-                                    color="transparent"
-                                    icon
+    <v-app id="inspire">
+        <v-navigation-drawer v-model="drawer" app clipped color="accent">
+            <v-layout column>
+                <v-card color="accent" >
+                    <v-card-text>
+                        <v-flex class="mb-4">
+                            <v-avatar size="150">
+                                <img
+                                    src="https://cdn.vuetifyjs.com/images/john.jpg"
+                                    alt="John"
                                 >
-                                    <v-icon
-                                    :class="{ 'show-btns': hover }"
-                                    color="transparent"
-                                    >
-                                    {{ icon }}
-                                    </v-icon>
-                                </v-btn>
-                                </div>
-                            </v-row>
-                            </v-card-title>
-                        </v-img>
-                        </v-card>
-                    </v-hover>
-                    </v-col>
-                </template>
-                </v-row>
-            </v-container>
-    </v-content>
-  </v-app>     
-</div>
+                            </v-avatar>
+                            <v-btn color="primary" @click="openAvatarPicker">Change Avatar</v-btn>
+                        </v-flex>
+                        <v-text-field 
+                            v-model="form.firstName"
+                            label="FirstName"
+                            readonly
+                            required
+                        ></v-text-field>
+                        <v-text-field
+                            v-model="form.lastName"
+                            label="Last Name"
+                            readonly
+                        ></v-text-field>
+                        <v-text-field
+                            v-model="form.contactEmail"
+                            label="Email Address"
+                            readonly
+                        ></v-text-field>
+                        <v-text-field 
+                            v-model="form.department"
+                            label="Department"
+                            readonly
+                            required
+                        ></v-text-field>
+                        <v-text-field 
+                            v-model="form.contactPhone"
+                            label="Phone No."
+                            readonly
+                            required
+                        ></v-text-field>
+                    </v-card-text>
+                </v-card>
+            </v-layout>    
+        </v-navigation-drawer>
 
+        <v-app-bar app color="primary" class="white--text" clipped-left>
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer"  class="white--text"/>
+        <v-toolbar-title class="white--text">Your Portal</v-toolbar-title>
+        </v-app-bar>
+        <v-content >
+            <v-img src="..//icons//bg.png"> 
+
+            <v-container
+            class="fill-height"
+            fluid> 
+                <v-container>
+                    <v-row       class="mb-6">
+                        <v-card hover class="mx-auto" max-width="400" @click.stop="dialog1 = true" > 
+                            <v-img
+                                src="..//icons//images.jpeg"
+                                height="200px"
+                                ></v-img>
+                            <v-card-title color="primary" class="headline">Take Attendance</v-card-title>
+                            <v-card-subtitle> Add new class details and take attendance using the barcode preesnt in the student ID</v-card-subtitle>
+                            <v-dialog v-model="dialog1" max-width="600">
+                                <AddClass></AddClass>
+                            </v-dialog>
+                        </v-card>
+                    </v-row>
+                <!-- </v-container>
+
+                <v-container> -->
+                    <v-row >
+                        <v-card hover class="mx-auto" max-width="400"    @click.stop="dialog2 = true" > 
+                            <v-img
+                                src="..//icons//download.png"
+                                height="200px"
+                                ></v-img>
+                            <v-card-title color="primary" class="headline">View Analysis</v-card-title>
+                            <v-card-subtitle>Track what, which and when the student was absent. Graphs and Tables make this easier to understand </v-card-subtitle>
+                            <v-dialog v-model="dialog2" max-width="600">
+                                <Visualize></Visualize>
+                            </v-dialog>
+                        </v-card>
+                        
+                    </v-row>
+                </v-container>
+           
+            </v-container>   
+            </v-img> 
+        </v-content>
+
+        <!-- <v-footer app  color="primary">
+        <span class="white--text">&copy; Made by Sameer, Piyush, Pratik, Mihir</span>
+        </v-footer> -->
+    </v-app>
 </template>
 
 <script>
-    
+    import AddClass from "..//components//AddClass.vue";
+    import Visualize from "..//components//Visualize.vue";
     export default {
+        props: {
+            source: String,
+        },
         name:'ProfessorPortal',
+        pageTitle: 'My Profile',
+        components:{
+            'AddClass':AddClass,
+            'Visualize':Visualize,
+            // 'Home':Home
+        },
+        methods:{
+            test:function(i){
+                this.id=i;
+
+                console.log(i,this.id);
+
+            },
+            
+        },
         data(){
-          return{
-            drawer: true,
-            worksheet:'',
-            clipped: false,
-            loading: false,
-            form: {
+            return{
+                id:5,
+                drawer: null,
+                absolute: true,
+                worksheet:'',
+                clipped: false,
+                loading: false,
+                dialog1: false,dialog2: false,
+                notifications: false,
+                sound: true,
+                widgets: false,
+                form: {
                         firstName: 'John',
                         lastName: 'Doe',
                         contactEmail: 'john@doe.com',
-                        avatar: 'MALE_CAUCASIAN_BLOND_BEARD',
-                        department: 'Computer'
+                        department:'Computer Engineering',
+                        contactPhone:'+919800077777',
+
                     },
-            showAvatarPicker: false,
-            icons: ['mdi-play'],
-            items: [
-                {
-                title: 'Add New Class',
-                text: "It's New Release Friday",
-                subtext: 'Newly released songs. Updated daily.',
-                img: 'http://lorempixel.com/output/nightlife-q-c-640-480-5.jpg',
-                },
-                {
-                title: 'View Attendance Analytics',
-                text: 'Greatest Rock Hits',
-                subtext: 'Lose yourself in rock tunes.',
-                img: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80',
-                },
-                {
-                title: 'Mellow Moods',
-                text: 'Ambient Bass',
-                subtext: 'Chill beats to mellow you out.',
-                img: 'http://lorempixel.com/output/abstract-q-c-640-480-6.jpg',
-                },
-            ],
-            transparent: 'rgba(255, 255, 255, 0)',
-                }
-       }
+                icons: ['mdi-play'],
+                items: [
+                    {
+                    title: 'Add New Class',
+                    img: './/icons//download.jpg',
+                    },
+                    {
+                    title: 'View Attendance Analytics',
+                    img: './/icons//download.jpg',
+                    },
+                    {
+                    title: 'Mellow Moods',
+                    img: './/icons//download.jpg',
+                    },
+                ],
+
+            }
+       },
+
+        
     }
-            
 </script>
-
-<style scoped>
-.v-card {
-  transition: opacity .4s ease-in-out;
-}
-
-.v-card:not(.on-hover) {
-  opacity: 0.6;
- }
-
-.show-btns {
-  color: rgba(255, 255, 255, 1) !important;
-}
-</style>
+×
+Drag and Drop
+The image will be downloaded

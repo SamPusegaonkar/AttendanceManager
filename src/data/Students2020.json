@@ -1,0 +1,27 @@
+[
+    {
+        "id":"SNCOUG160045",
+        "name":"Mihir Raul",
+        "age":21,
+        "email":"Mihir.Raul@gmail.com",
+        "rollno":21,
+        "div":"B"
+    },
+    {
+        "id":"SNCOUG160082",
+        "name":"Sameer Pusegaonkar",
+        "age":20,
+        "email":"Sameer.Pusegaonkar@gmail.com",
+        "rollno":45,
+        "div":"B"
+    },
+    {
+        "id":"SNELUG160056",
+        "name":"Piyush Singh Pasi",
+        "age":21,
+        "email":"piyush.pasi@gmail.com",
+        "rollno":41,
+        "div":"B"
+    }
+ 
+]
