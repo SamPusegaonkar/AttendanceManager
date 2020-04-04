@@ -135,9 +135,9 @@
                 sound: true,
                 widgets: false,
                 form: {
-                        firstName: 'John',
-                        lastName: 'Doe',
-                        contactEmail: 'john@doe.com',
+                        firstName: 'Satish',
+                        lastName: 'Ket',
+                        contactEmail: 'satish.ket@mctrgit.ac.in',
                         department:'Computer Engineering',
                         contactPhone:'+919800077777',
 

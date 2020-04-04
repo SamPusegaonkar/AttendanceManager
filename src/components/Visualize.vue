@@ -1,6 +1,6 @@
 <template>
 <v-card class="mx-auto" max-width="600">
-    <v-toolbar dark color="primary">
+    <v-toolbar dark color="warning">
           <v-btn icon dark>
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -53,14 +53,14 @@
     </v-row>
     <v-row align="center">
         <v-col class="text-center" >
-		<v-btn raised color="primary" @click="generate( )">Generate</v-btn>
+		<v-btn raised color="warning" @click="generate()">Generate</v-btn>
           </v-col>
     </v-row>
     <v-row align="center">
         <v-col class="text-center" >
             <v-data-table  v-if="this.format =='Table'"   loading-text="Loading... Please wait" :headers="headers1" :items="rows1"  class="elevation-1"  ></v-data-table>
-			<v-sheet v-else-if="this.format == 'Graph'" class="v-sheet--offset mx-auto" color="cyan" elevation="12" max-width="calc(100% - 32px)">
-				<v-sparkline  :labels="labels" :value="value" color="white" line-width="2" padding="16"></v-sparkline>
+			<v-sheet v-else-if="this.format == 'Graph'" class="v-sheet--offset mx-auto" color="warning" elevation="12" max-width="calc(100% - 32px)">
+				<v-sparkline  :labels="labels" :value="graph_value" color="white" line-width="2" padding="16"></v-sparkline>
 			</v-sheet>	
         </v-col>
     </v-row>
@@ -85,24 +85,10 @@ export default {
 				value: 'name',
 			},
 			],
-			value: [
-				423,
-				446,
-				675,
-				510,
-				590,
-				610,
-				760,
+			graph_value: [
+
 			],
 			labels: [
-				'12am',
-				'3am',
-				'6am',
-				'9am',
-				'12pm',
-				'3pm',
-				'6pm',
-				'9pm',
 			],
 			list:'',
 			div:'',
@@ -127,30 +113,46 @@ export default {
 	methods:{
         generate:function(){	
         // this.show=show_item;
-        this.rows1=[];
-        console.log(this.rows1)
+        console.log("ABCD");
+			if(this.format=='Table'){
 
-		this.headers1=[];
-		this.headers1.push({text: 'Student ID',align: 'start',sortable: false,value: 'name',});   
-		
-		axios.post('http://localhost:3002/',{
-		data:{subject:this.subject,div:this.div,date:this.date}
-		})
-		.then(response=>{
-		console.log(response.data)
-		this.rows1=response.data.rows
-		this.headers1.push(response.data.header[0])
+				this.rows1=[];
+				console.log(this.rows1)
 
-		console.log(this.rows1)
-		console.log(this.headers1)
-		}).catch(error =>{
-		console.log(error);
-		console.log('ERROR::',error.response.body)
-		});
-		console.log("success="+this.success);
-		console.log(this.div,this.list[0].div);
-		console.log(this.date,this.list[0].date);
-		console.log(this.subject,this.list[0].subject);
+				this.headers1=[];
+				this.headers1.push({text: 'Student ID',align: 'start',sortable: false,value: 'name',});   
+				axios.post('http://localhost:3002/',{
+				data:{subject:this.subject,div:this.div,date:this.date}
+				})
+				.then(response=>{
+				console.log(response.data)
+				this.rows1=response.data.rows
+				this.headers1.push(response.data.header[0])
+
+				console.log(this.rows1)
+				console.log(this.headers1)
+				}).catch(error =>{
+				console.log(error);
+				console.log('ERROR::',error.response.body)
+				});
+			}
+			else if(this.format=='Graph'){
+				console.log("hello2");
+				this.graph_value=[];
+				this.labels=[];
+				axios.post('http://localhost:3002/',{
+				data:{format:this.format,subject:this.subject,div:this.div}
+				}).then(response=>{
+					this.graph_value=response.data.graph_value
+					this.labels=response.data.labels
+					console.log(this.graph_value)
+					console.log(this.labels)
+				}).catch(error =>{
+					console.log(error);
+					console.log('ERROR::',error.response.body)
+				});
+			}
+        
 	
 		},
 	}, 
