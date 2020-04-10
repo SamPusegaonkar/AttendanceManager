@@ -3,10 +3,36 @@
         "email":"satish.ket@mctrgit.ac.in",
         "department":"Computer",
         "password":"Satish123"
+		
     },
     {
         "email":"bhushan.patil@mctrgit.ac.in",
         "department":"Computer",
         "password":"Bhushan123"
+    },
+	{
+        "email":"dilip.dalgade@mctrgit.ac.in",
+        "department":"Computer",
+        "password":"Dilip123"
+    },
+	{
+        "email":"savita.lade@mctrgit.ac.in",
+        "department":"Computer",
+        "password":"Savita123"
+    },
+	{
+        "email":"bhavesh.panchal@mctrgit.ac.in",
+        "department":"Computer",
+        "password":"Bhavesh123"
+    },
+	{
+        "email":"priya.parate@mctrgit.ac.in",
+        "department":"Computer",
+        "password":"Priya123"
+    },
+	{
+        "email":"sumitra.sadhukhan@mctrgit.ac.in",
+        "department":"Computer",
+        "password":"Sumitra123"
     }
 ]

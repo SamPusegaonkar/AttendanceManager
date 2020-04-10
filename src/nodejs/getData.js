@@ -1,14 +1,12 @@
 const express = require('express') 
 var bodyParser = require('body-parser')
-const fs = require('fs');
 
-const student_data = require('..//data//Students2020.json')
-const attendance_record = require('..//data//data.json')
-const professor_data = require('..//data//Professor.json')
+
 
 const app_professor =express()
 const app_student = express()
-const app_attendance_record = express()
+const app_send_attendance_record = express()
+const app_save_attendance_record = express()
 
 'use strict';
 app_professor.use(bodyParser.urlencoded({ extended: false }))
@@ -19,9 +17,13 @@ app_student.use(bodyParser.urlencoded({ extended: false }))
 app_student.use(bodyParser.json())
 app_student.use(express.static('public'));
 
-app_attendance_record.use(bodyParser.urlencoded({ extended: false }))
-app_attendance_record.use(bodyParser.json())
-app_attendance_record.use(express.static('public'));
+app_send_attendance_record.use(bodyParser.urlencoded({ extended: false }))
+app_send_attendance_record.use(bodyParser.json())
+app_send_attendance_record.use(express.static('public'));
+
+app_save_attendance_record.use(bodyParser.urlencoded({ extended: false }))
+app_save_attendance_record.use(bodyParser.json())
+app_save_attendance_record.use(express.static('public'));
 
 app_professor.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -37,14 +39,23 @@ res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
 next();
 });
 
-app_attendance_record.use(function(req, res, next) {
+app_send_attendance_record.use(function(req, res, next) {
 res.header("Access-Control-Allow-Origin", "*");
 res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
 next();
 });
 
+app_save_attendance_record.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    next();
+    });
+
 app_professor.post('/',function(req,res){
+    
+    const professor_data = require('..//data//Professor.json')
     var i,counter=0;
     for(i=0;i<professor_data.length;i++){
         if(req.body['data'].prof_email==professor_data[i].email  &&  req.body['data'].password==professor_data[i].password) {
@@ -66,6 +77,7 @@ app_professor.post('/',function(req,res){
 });
 
 app_student.post('/',function(req,res){
+    const student_data = require('..//data//Students2020.json')
     var i,counter=0;
     // console.log(req.body);
     for(i=0;i<student_data.length;i++){
@@ -76,29 +88,76 @@ app_student.post('/',function(req,res){
     }
 
 });
-var mongoose=require('mongoose');
-const {encrypt, decrypt, transform}= require('./crypt.js');
 
-const DB="attendance_cloud_system"
-var mongoose = require('mongoose');
-const url='mongodb://localhost/'+DB;
-app_attendance_record.post('/',function(req,res){
+app_send_attendance_record.post('/',function(req,res){
     var i,data={};
-    data['header']=[];
-    data['rows']=[];
-	data['header'].push({text:req.body['data'].date,value: 'value'});
-    var db1 = require('./insertInDB.js')
     
-	db1.FindStudentMatch(req.body['data'].subject,req.body['data'].div,req.body['data'].date).then(function(items) {
-	  console.info('The promise was fulfilled with items!', items);
-	  data['rows']=items
-	  console.log("%j",data)
-	  res.json(data);
-	}, function(err) {
-	  console.error('The promise was rejected', err, err.stack);
-	});
+    const attendance_record = require('..//data//data.json')
+
+    if(req.body['data'].format=="Table"){
+		console.log('Table')
+        var i,data={};
+			data['header']=[];
+			data['rows']=[];
+			data['header'].push({text:req.body['data'].date,value: 'value'});
+			var db1 = require('./insertInDB.js')
+			
+			db1.FindStudentMatch(req.body['data'].subject,req.body['data'].div,req.body['data'].date).then(function(items) {
+			  console.info('The promise was fulfilled with items!', items);
+			  data['rows']=items
+			  console.log("%j",data)
+			  res.json(data);
+			}, function(err) {
+			  console.error('The promise was rejected', err, err.stack);
+			});
+				//res.json(data);
+
+    }
+    else if(req.body['data'].format=="Graph"){
+
+        console.log(req.body['data'].format);
+        data['graph_value']=[]
+        data['labels']=[]
+        const attendance_record = require('..//data//data.json')
+
+        for(i=0; i<attendance_record.length; i++){
+            var count=0;
+            if(attendance_record[i].subject==req.body['data'].subject && attendance_record[i].div==req.body['data'].div){
+                data['labels'].push(attendance_record[i].date)
+                for (var key in attendance_record[i].attendance){
+                    count++;
+
+                }
+                data['graph_value'].push(count)
+
+            }
+
+        }
+        console.log(data);
+        res.json(data);  
+
+    }
+    
+});
+
+app_save_attendance_record.post('/',function(req,res){
+    
+    // console.log(req.body['data']);
+    var fs = require('fs')
+    // res.send(1);
+    fs.readFile('..//data//data.json', function (err, data) {
+        var json = JSON.parse(data);
+        json.push(req.body['data']);    
+        fs.writeFile("..//data//data.json", JSON.stringify(json), function(err){
+          if (err) throw err;
+        //   console.log('The "data to append" was appended to file!');
+        });
+    })
 
 });
+    
+
+
 app_professor.listen(3000,function(){
     console.log("Professor data @ 3000");
 });
@@ -107,13 +166,10 @@ app_student.listen(3001,function(){
     console.log("Student data @ 3001");
 });
 
-app_attendance_record.listen(3002,function(){
-    console.log("Attendance data @ 3002");
+app_send_attendance_record.listen(3002,function(){
+    console.log("Obtaining Attendance data @ 3002");
 });
 
-
-
-
-
-
-
+app_save_attendance_record.listen(3003,function(){
+    console.log("Saving Attendance data @ 3003");
+});

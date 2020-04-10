@@ -17,6 +17,7 @@
     "quagga": "^0.12.1",
     "socket.io": "^2.3.0",
     "vue": "^2.6.11",
+    "vue-barcode-reader": "0.0.3",
     "vue-barcode-scanner": "^0.6.0",
     "vue-cc-quaggajs": "^2.2.2",
     "vue-multi-format-barcode": "^0.1.3",

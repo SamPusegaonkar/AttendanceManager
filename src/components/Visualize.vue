@@ -113,7 +113,7 @@ export default {
 	methods:{
         generate:function(){	
         // this.show=show_item;
-        console.log("ABCD");
+        console.log("Format="+this.format);
 			if(this.format=='Table'){
 
 				this.rows1=[];
@@ -122,7 +122,7 @@ export default {
 				this.headers1=[];
 				this.headers1.push({text: 'Student ID',align: 'start',sortable: false,value: 'name',});   
 				axios.post('http://localhost:3002/',{
-				data:{subject:this.subject,div:this.div,date:this.date}
+				data:{format:this.format,subject:this.subject,div:this.div,date:this.date}
 				})
 				.then(response=>{
 				console.log(response.data)

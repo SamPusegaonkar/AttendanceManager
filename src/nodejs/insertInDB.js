@@ -1,4 +1,4 @@
-const {encrypt, decrypt, transform}= require('./crypt.js');
+const {encrypt, decrypt, transform,hashed}= require('./crypt.js');
 
 const DB="attendance_cloud_system"
 var mongoose = require('mongoose');
@@ -7,6 +7,49 @@ const collname='student_signup_details'
 
 
 var attendance_record = require('..//data//data.json')
+var prof_record = require('..//data//Professor.json')
+
+function professorConvertJson(){
+	for(var row in prof_record){
+		console.log("-----------------------------------------------------------------")
+		let enc=transform()
+		for(var item in prof_record[row]){
+				console.log("Item= "+item+":"+prof_record[row][item])
+				if (item=="password"){
+					prof_record[row][item]=hashed(prof_record[row][item],enc.salt).hash
+				}
+				else{
+				prof_record[row][item]=encrypt(prof_record[row][item],enc.key)
+				}
+				prof_record[row]['salt']=enc.salt
+		}
+		console.log("-----------------------------------------------------------------")
+	}
+	
+	for(var row in prof_record){
+		console.log("-----------------------------------------------------------------")
+		//let enc=transform()
+		for(var item in prof_record[row]){
+				console.log("Item= "+item+":"+prof_record[row][item])
+				//attendance_record[row][item]=encrypt(attendance_record[row][item],enc.key)
+				//attendance_record[row]['salt']=enc.salt
+		}
+		console.log("-----------------------------------------------------------------")
+	}
+	
+}
+//professorConvertJson()
+
+function insertProf(data){
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
+	db.collection('collegeProfessor').insertMany(data,function(err,result){
+		if (err) throw err;
+		console.log("Number of records inserted: " + result.insertedCount);  
+		db.close(); 
+	});
+});
+}
+//insertProf(prof_record)
 
 function convertJson(){	
 	for(var row in attendance_record){
@@ -177,12 +220,34 @@ var result = server.db("test").getCollection("posts").find().toArray();
 console.log(result);
 server.close();
 */
-var Promise = require('promise');
+//var Promise = require('promise');
 var MongoClient = require('mongodb').MongoClient;
 var urli='mongodb://localhost/'+DB;
 
                  
 module.exports = {
+	
+  FindProfMatch: function(prof_email,password){
+	  return MongoClient.connect("mongodb://localhost/").then(function(client){
+		  let db=client.db('attendance_cloud_system');
+		  var collection=db.collection('collegeProfessor');
+		  return collection.find().toArray();
+	  }).then(function(result){
+		  for(var i=0;i<result.length;i++){
+			var buf_email = new Buffer.from(result[i].email.slice(0,24), 'base64');
+			const hashed_pass=hashed(password,result[i].salt)
+			//var buf_pass = new Buffer.from(result[i].subject.slice(0,24), 'base64');
+			let enc=transform(result[i].salt);
+			let cipherEmail=encrypt(prof_email,enc.key,buf_email);
+			if(cipherEmail==result[i].email && hashed_pass==result[i].password){
+				return "1"
+			}
+			
+		  }
+		  return "0";
+	  });
+  }
+	
   FindStudentMatch: function(subject,div,date) {
 	
     return MongoClient.connect("mongodb://localhost/").then(function(client) {
@@ -198,16 +263,10 @@ module.exports = {
 		var buf_subject = new Buffer.from(result[i].subject.slice(0,24), 'base64');
 		var buf_div = new Buffer.from(result[i].div.slice(0,24), 'base64');
 		var buf_date = new Buffer.from(result[i].date.slice(0,24), 'base64');
-		//var buf_date = new Buffer.from(result[i].date.slice(0,24), 'base64');
-		//console.log('iv type: '+buf_subject)
-		
 		let enc=transform(result[i].salt);
-		//let cipherEmail=encrypt(email,enc.key,buf_email);
 		let cipherSubject=encrypt(subject,enc.key,buf_subject);
 		let cipherDiv=encrypt(div,enc.key,buf_div);
 		let cipherDate=encrypt(date,enc.key,buf_date);
-		//let prof_password=hashed()
-		//console.log("subject"+req.body['data'].subject)
 		if( /*cipherEmail==result[i].email &&*/ cipherSubject==result[i].subject && cipherDiv==result[i].div && cipherDate==result[i].date){
 			
 			console.log('Match Found')
@@ -221,9 +280,7 @@ module.exports = {
 
 				}
 			}
-			//console.log('Decrypted Student Name: '+decrypt(result[i].attendance.Student1,enc.key));
-			//console.log('Decrypted Student Name: '+decrypt(result[i].email,enc.key));
-			
+
 		}
 		
 	}
