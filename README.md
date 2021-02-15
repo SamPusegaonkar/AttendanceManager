@@ -10,13 +10,13 @@ A web interface to manage academic attendance of students. Since it is built on 
 
     1. NPM 
     2. VueJS
-    2. Vuetify
+    3. Vuetify
     
   **To run the project**: 
 
     1. Navigate to the repo using cmd
-    1. Type npm install
-    2. Type npm run serve
+    2. Type npm install
+    3. Type npm run serve
     
   **Some Output Photos**: 
 
