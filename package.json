@@ -15,7 +15,7 @@
     "mongoose": "^5.9.7",
     "nodemon": "^2.0.2",
     "quagga": "^0.12.1",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.5.0",
     "vue": "^2.6.11",
     "vue-barcode-reader": "0.0.3",
     "vue-barcode-scanner": "^0.6.0",
